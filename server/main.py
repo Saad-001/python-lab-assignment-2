@@ -39,6 +39,7 @@ while True :
                         zip_folder = 'zip_folder'
                         final_path_dest = os.path.join(primary_path_dest, zip_folder)
                         final_path_server = os.path.join(primary_path_server, zip_folder)
+                        
                         try:
                             os.mkdir(final_path_server) 
                         except OSError as error:
@@ -50,7 +51,10 @@ while True :
                     fdst.close()
                     
                     shutil.make_archive(final_path_server, 'zip', primary_path_server)
-                    shutil.copy(f"{final_path_server}.zip", destination_path)
+                    try:
+                        shutil.copy(f"{final_path_server}.zip", destination_path)
+                    except shutil.SameFileError:
+                        pass
 
                     with ZipFile(f"{final_path_dest}.zip", 'r') as zip :
                         zip.extractall(path=primary_path_dest)
